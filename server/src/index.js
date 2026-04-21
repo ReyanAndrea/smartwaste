@@ -13,7 +13,7 @@ app.use(express.json());
 
 // Test route
 app.get("/", (req, res) => {
-  res.json({ message: "SmartWaste API is running!" });
+  res.json({ message: "SmartWaste API is running yaaa!" });
 });
 
 app.listen(PORT, () => {
