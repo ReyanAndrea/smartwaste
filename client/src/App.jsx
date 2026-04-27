@@ -7,6 +7,7 @@ import RegisterPage from './pages/RegisterPage';
 import Dashboard from './pages/Dashboard';
 import ReportPage from './pages/ReportPage';
 import HistoryPage from './pages/HistoryPage';
+import Profil from './pages/Profil';
 
 
 export default function App() {
@@ -23,6 +24,7 @@ export default function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/report" element={<ReportPage />} />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/profil" element={<Profil />} />
         </Routes>
       </div>
     </BrowserRouter>
