@@ -16,6 +16,9 @@ export default function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/login-warga" element={<LoginWargaPage />} />
           <Route path="/register" element={<RegisterPage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/report" element={<ReportPage />} />
+          <Route path="/history" element={<HistoryPage />} />
         </Routes>
       </div>
     </BrowserRouter>
