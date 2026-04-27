@@ -4,6 +4,10 @@ import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
 import LoginWargaPage from './pages/LoginWargaPage';
 import RegisterPage from './pages/RegisterPage';
+import Dashboard from './pages/Dashboard';
+import ReportPage from './pages/ReportPage';
+import HistoryPage from './pages/HistoryPage';
+
 
 export default function App() {
   return (
