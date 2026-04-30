@@ -1,158 +1,263 @@
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 
-export default function LandingPage() {
+export default function Landingpage() {
   const navigate = useNavigate();
 
-  const features = [
-    { icon: '📍', label: 'Lapor dengan Lokasi', color: '#E8F5E9', iconBg: '#4CAF50' },
-    { icon: '⚡', label: 'Laporan Cepat', color: '#FFF9E6', iconBg: '#FFC107' },
-    { icon: '✓', label: 'Terlaksana', color: '#E3F2FD', iconBg: '#2196F3' },
-    { icon: '📊', label: 'Pantau Status Realtime', color: '#F3E5F5', iconBg: '#9C27B0' },
-  ];
+  const card = {
+    width: "108px",
+    height: "118px",
+    background: "#eef1ea",
+    borderRadius: "18px",
+    boxShadow: "0 5px 10px rgba(0,0,0,.08)",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+    gap: "8px",
+    textAlign: "center",
+    padding: "8px",
+    cursor: "pointer",
+    transition: "all .25s ease"
+  };
+
+  const iconBox = (bg) => ({
+    width: "54px",
+    height: "54px",
+    borderRadius: "14px",
+    background: bg,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    fontSize: "24px"
+  });
+
+  const hoverIn = (e) => {
+    e.currentTarget.style.transform = "scale(1.06)";
+    e.currentTarget.style.boxShadow = "0 10px 18px rgba(0,0,0,.14)";
+  };
+
+  const hoverOut = (e) => {
+    e.currentTarget.style.transform = "scale(1)";
+    e.currentTarget.style.boxShadow = "0 5px 10px rgba(0,0,0,.08)";
+  };
+
+  const btnIn = (e) => {
+    e.currentTarget.style.transform = "scale(1.05)";
+    e.currentTarget.style.boxShadow = "0 8px 14px rgba(0,0,0,.12)";
+  };
+
+  const btnOut = (e) => {
+    e.currentTarget.style.transform = "scale(1)";
+    e.currentTarget.style.boxShadow = "none";
+  };
 
   return (
     <div style={{
-      minHeight: '100vh',
-      background: '#f5f5f5',
-      fontFamily: "'Poppins', sans-serif",
-      display: 'flex',
-      flexDirection: 'column',
+      width: "100%",
+      height: "100vh",
+      margin: 0,
+      padding: 0,
+      background: "#a8c28f",
+      display: "flex",
+      justifyContent: "center",
+      overflow: "hidden"
     }}>
-      {/* Header green section */}
       <div style={{
-        background: 'linear-gradient(180deg, #6B8F5E 0%, #7A9E6A 60%, #8BAF78 100%)',
-        borderBottomLeftRadius: '30px',
-        borderBottomRightRadius: '30px',
-        padding: '2rem 1.5rem 3rem',
-        position: 'relative',
+        width: "570px",
+        height: "100vh",
+        background: "#a8c28f",
+        overflow: "hidden",
+        fontFamily: "Poppins,sans-serif"
       }}>
-        {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '1.5rem' }}>
-          <span style={{ fontSize: '20px' }}>🗑️</span>
-          <span style={{ fontWeight: '700', fontSize: '18px', color: 'white' }}>
-            Smart<span style={{ color: '#FFD54F' }}>Waste</span>
-          </span>
-        </div>
 
-        <h2 style={{
-          color: 'white',
-          fontSize: '22px',
-          fontWeight: '700',
-          marginBottom: '0.5rem',
-          lineHeight: '1.3',
-        }}>
-          Laporkan sampah,<br />lebih cepat & mudah
-        </h2>
-        <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '13px', marginBottom: '2rem' }}>
-          Sistem pelaporan sampah digital berbasis web
-        </p>
-
-        {/* Feature grid */}
+        {/* HEADER */}
         <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '12px',
+          background: "#557f59",
+          padding: "20px 30px 70px",
+          borderBottomLeftRadius: "50% 60px",
+          borderBottomRightRadius: "50% 60px",
+          color: "#fff"
         }}>
-          {features.map((f, i) => (
-            <div key={i} style={{
-              background: f.color,
-              borderRadius: '16px',
-              padding: '16px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '8px',
+
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "8px",
+            marginTop: "8px"
+          }}>
+            <img src={logo} style={{ width: "22px" }} />
+
+            <div style={{
+              fontWeight: "700",
+              fontSize: "17px"
             }}>
-              <div style={{
-                width: '48px',
-                height: '48px',
-                borderRadius: '50%',
-                background: f.iconBg,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                fontSize: '20px',
-              }}>
-                {f.icon}
-              </div>
-              <span style={{ fontSize: '11px', fontWeight: '600', color: '#333', textAlign: 'center' }}>
-                {f.label}
-              </span>
+              <span style={{ color: "#D2D0A0" }}>Smart</span>
+              <span style={{ color: "#6F4E37" }}>Waste</span>
             </div>
-          ))}
-        </div>
-      </div>
+          </div>
 
-      {/* Bottom section */}
-      <div style={{ padding: '2rem 1.5rem', flex: 1 }}>
-        <h3 style={{ fontWeight: '700', fontSize: '18px', color: '#2d2d2d', marginBottom: '0.5rem' }}>
-          Mulai Sekarang
-        </h3>
-        <p style={{ fontSize: '13px', color: '#666', marginBottom: '2rem', lineHeight: '1.5' }}>
-          Buat akun gratis & laporkan masalah sampah<br />di sekitarmu.
-        </p>
+          <div style={{
+            marginTop: "20px",
+            fontSize: "24px",
+            fontWeight: "800",
+            lineHeight: "1.2"
+          }}>
+            Laporkan sampah,<br />
+            lebih cepat & mudah
+          </div>
 
-        <div style={{ display: 'flex', gap: '12px', marginBottom: '1.5rem' }}>
-          <button
-            onClick={() => navigate('/register')}
-            style={{
-              flex: 1,
-              background: 'transparent',
-              color: '#6B8F5E',
-              border: '2px solid #6B8F5E',
-              borderRadius: '30px',
-              padding: '12px',
-              fontSize: '15px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              fontFamily: "'Poppins', sans-serif",
-            }}
-          >
-            Daftar
-          </button>
-          <button
-            onClick={() => navigate('/login')}
-            style={{
-              flex: 1,
-              background: '#6B8F5E',
-              color: 'white',
-              border: 'none',
-              borderRadius: '30px',
-              padding: '12px',
-              fontSize: '15px',
-              fontWeight: '600',
-              cursor: 'pointer',
-              fontFamily: "'Poppins', sans-serif",
-            }}
-          >
-            Masuk
-          </button>
+          <div style={{
+            marginTop: "14px",
+            fontSize: "13px",
+            color: "#edf3ec"
+          }}>
+            Sistem pelaporan sampah digital berbasis web
+          </div>
         </div>
 
-        {/* Stats */}
+        {/* FEATURE GRID */}
         <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: '8px',
-          background: '#E8F5E9',
-          borderRadius: '12px',
-          padding: '12px 16px',
+          display: "grid",
+          gridTemplateColumns: "1fr 1fr",
+          gap: "18px",
+          padding: "22px 82px 0"
+        }}>
+
+          <div style={card} onMouseEnter={hoverIn} onMouseLeave={hoverOut}>
+            <div style={iconBox("#dca8a8")}>📍</div>
+            <div style={{ fontSize: "12px" }}>
+              Lapor dengan<br />Lokasi
+            </div>
+          </div>
+
+          <div style={card} onMouseEnter={hoverIn} onMouseLeave={hoverOut}>
+            <div style={iconBox("#e6d88f")}>⚡</div>
+            <div style={{ fontSize: "12px" }}>Respon Cepat</div>
+          </div>
+
+          <div style={card} onMouseEnter={hoverIn} onMouseLeave={hoverOut}>
+            <div style={iconBox("#dbe7d7")}>✅</div>
+            <div style={{ fontSize: "12px" }}>Terkelola</div>
+          </div>
+
+          <div style={card} onMouseEnter={hoverIn} onMouseLeave={hoverOut}>
+            <div style={iconBox("#8fb7c8")}>🕒</div>
+            <div style={{ fontSize: "12px" }}>
+              Pantau Status<br />Realtime
+            </div>
+          </div>
+
+        </div>
+
+        {/* CTA */}
+        <div style={{
+          width: "380px",
+          margin: "18px auto 0",
+          background: "#78996d",
+          borderRadius: "16px",
+          padding: "18px"
         }}>
           <div style={{
-            width: '28px',
-            height: '28px',
-            borderRadius: '50%',
-            background: '#4CAF50',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontSize: '14px',
-          }}>✓</div>
-          <span style={{ fontSize: '13px', color: '#2d2d2d' }}>
-            Sudah <strong>1rb+ laporan</strong> tertangani di seluruh Aceh
-          </span>
+            color: "#fff",
+            fontSize: "18px",
+            fontWeight: "800"
+          }}>
+            Mulai Sekarang
+          </div>
+
+          <div style={{
+            marginTop: "8px",
+            color: "#eef3eb",
+            fontSize: "12px",
+            lineHeight: "1.5"
+          }}>
+            Buat akun gratis & laporkan masalah sampah di sekitarmu
+          </div>
+
+          <div style={{
+            display: "flex",
+            gap: "14px",
+            marginTop: "16px"
+          }}>
+
+            <button
+              onClick={() => navigate("/register")}
+              onMouseEnter={btnIn}
+              onMouseLeave={btnOut}
+              style={{
+                flex: 1,
+                height: "40px",
+                border: "none",
+                borderRadius: "14px",
+                background: "#fff",
+                fontWeight: "700",
+                fontSize: "15px",
+                cursor: "pointer",
+                transition: "all .25s ease"
+              }}
+            >
+              Daftar
+            </button>
+
+            <button
+              onClick={() => navigate("/login")}
+              onMouseEnter={btnIn}
+              onMouseLeave={btnOut}
+              style={{
+                flex: 1,
+                height: "40px",
+                border: "none",
+                borderRadius: "14px",
+                background: "#5f8757",
+                color: "#fff",
+                fontWeight: "700",
+                fontSize: "15px",
+                cursor: "pointer",
+                transition: "all .25s ease"
+              }}
+            >
+              Masuk
+            </button>
+
+          </div>
         </div>
+
+        {/* FOOTER */}
+        <div style={{
+          width: "380px",
+          margin: "14px auto 14px",
+          background: "#b4825d",
+          borderRadius: "16px",
+          padding: "14px 18px",
+          display: "flex",
+          alignItems: "center",
+          gap: "14px"
+        }}>
+          <div style={{
+            width: "42px",
+            height: "42px",
+            borderRadius: "50%",
+            background: "#dbe8d5",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            fontSize: "22px",
+            color: "#557f59"
+          }}>
+            ✓
+          </div>
+
+          <div style={{
+            color: "#fff",
+            fontSize: "13px",
+            lineHeight: "1.4"
+          }}>
+            Sudah <b>1rb+ laporan</b> tertangani di seluruh Aceh
+          </div>
+        </div>
+
       </div>
     </div>
   );
