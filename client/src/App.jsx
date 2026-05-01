@@ -8,6 +8,9 @@ import ReportPage from './pages/ReportPage';
 import HistoryPage from './pages/HistoryPage';
 import DetailReportPage from "./pages/DetailReportPage";
 import NotificationPage from "./pages/NotificationPage";
+import ProfilePage from "./pages/ProfilePage";
+import EditProfilePage from "./pages/EditProfilePage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 
 export default function App() {
   return (
@@ -24,6 +27,9 @@ export default function App() {
           <Route path="/history" element={<HistoryPage />} />
           <Route path="/detail/:id" element={<DetailReportPage />} />
           <Route path="/notif" element={<NotificationPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/edit-profile" element={<EditProfilePage />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
         </Routes>
       </div>
     </BrowserRouter>

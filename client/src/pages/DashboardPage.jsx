@@ -159,7 +159,7 @@ export default function Dashboard() {
               </div>
             </div>
 
-            <img src={logo} style={{ width: "34px" }} />
+            <img src={logo} style={{ width: "28px" }} />
           </div>
         </div>
 

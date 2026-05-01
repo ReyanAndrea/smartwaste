@@ -132,7 +132,7 @@ export default function Reportpage() {
               Buat Laporan Sampah
             </div>
 
-            <img src={logo} style={{ width: "34px" }} />
+            <img src={logo} style={{ width: "28px" }} />
           </div>
         </div>
 
