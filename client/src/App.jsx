@@ -2,12 +2,12 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import WelcomePage from './pages/WelcomePage';
 import LandingPage from './pages/LandingPage';
 import LoginPage from './pages/LoginPage';
-import LoginWargaPage from './pages/LoginWargaPage';
 import RegisterPage from './pages/RegisterPage';
-import Dashboard from './pages/Dashboard';
+import DashboardPage from './pages/DashboardPage';
 import ReportPage from './pages/ReportPage';
 import HistoryPage from './pages/HistoryPage';
-
+import DetailReportPage from "./pages/DetailReportPage";
+import NotificationPage from "./pages/NotificationPage";
 
 export default function App() {
   return (
@@ -18,11 +18,12 @@ export default function App() {
           <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/landing" element={<LandingPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/login-warga" element={<LoginWargaPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
           <Route path="/report" element={<ReportPage />} />
           <Route path="/history" element={<HistoryPage />} />
+          <Route path="/detail/:id" element={<DetailReportPage />} />
+          <Route path="/notif" element={<NotificationPage />} />
         </Routes>
       </div>
     </BrowserRouter>
