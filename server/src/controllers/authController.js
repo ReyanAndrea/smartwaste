@@ -6,6 +6,90 @@ import {
 
 const prisma = new PrismaClient();
 
+
+// Change password
+export const changePassword = async (req, res) => {
+  try {
+    const {
+      oldPassword,
+      newPassword
+    } = req.body;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: req.user.id
+      },
+    });
+
+    const isMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isMatch) {
+      return res.status(400).json({
+        message: "Password lama tidak sesuai"
+      });
+    }
+
+    if (newPassword.length < 8) {
+      return res.status(400).json({
+        message: "Password baru minimal 8 karakter"
+      });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await prisma.user.update({
+      where: {
+        id: req.user.id
+      },
+      data: {
+        password: hashedPassword
+      },
+    });
+
+    res.json({
+      message: "Password berhasil diubah"
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message
+    });
+  }
+};
+
+// Update profile
+export const updateProfile = async (req, res) => {
+  try {
+    const {
+      name,
+      email
+    } = req.body;
+
+    const user = await prisma.user.update({
+      where: {
+        id: req.user.id
+      },
+      data: {
+        name,
+        email
+      },
+    });
+
+    res.json({
+      message: "Profil berhasil diperbarui",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Server error",
+      error: error.message
+    });
+  }
+};
+
 // Register
 export const register = async (req, res) => {
   try {
