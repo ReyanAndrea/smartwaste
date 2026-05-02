@@ -1,7 +1,9 @@
 import { useState } from "react";
-import DashboardAdmin from "./DashboardAdmin";
-import DetailLaporan from "./DetailLaporan";
-import RiwayatLaporan from "./RiwayatLaporan";
+import DashboardAdminPage from "./DashboardAdminPage";
+import DetailLaporanPage from "./DetailLaporanPage";
+import RiwayatLaporanPage from "./RiwayatLaporanPage";
+import ProfilePage from "./ProfilePage";
+import TentangSistemPage from "./TentangSistemPage";
 
 export default function AdminApp() {
   const [screen, setScreen] = useState("dashboard");
@@ -9,7 +11,7 @@ export default function AdminApp() {
 
   if (screen === "detail") {
     return (
-      <DetailLaporan
+      <DetailLaporanPage
         laporan={selectedLaporan}
         onKembali={() => setScreen(selectedLaporan?._from || "dashboard")}
       />
@@ -18,8 +20,10 @@ export default function AdminApp() {
 
   if (screen === "riwayat") {
     return (
-      <RiwayatLaporan
+      <RiwayatLaporanPage
         onBeranda={() => setScreen("dashboard")}
+        onLaporan={() => setScreen("riwayat")}
+        onProfil={() => setScreen("profil")}
         onDetailLaporan={(item) => {
           setSelectedLaporan({ ...item, _from: "riwayat" });
           setScreen("detail");
@@ -28,14 +32,32 @@ export default function AdminApp() {
     );
   }
 
+  if (screen === "profil") {
+    return (
+      <ProfilePage
+        onBeranda={() => setScreen("dashboard")}
+        onLaporan={() => setScreen("riwayat")}
+        onTentangSistem={() => setScreen("tentang")}
+        onLogout={() => setScreen("dashboard")}
+      />
+    );
+  }
+
+  if (screen === "tentang") {
+    return (
+      <TentangSistemPage onKembali={() => setScreen("profil")} />
+    );
+  }
+
   return (
-    <DashboardAdmin
+    <DashboardAdminPage
       onDetailLaporan={(item) => {
         setSelectedLaporan({ ...item, _from: "dashboard" });
         setScreen("detail");
       }}
       onLihatSemua={() => setScreen("riwayat")}
       onLaporan={() => setScreen("riwayat")}
+      onProfil={() => setScreen("profil")}
     />
   );
 }
