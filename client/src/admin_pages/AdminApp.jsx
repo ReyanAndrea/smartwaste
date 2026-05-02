@@ -1,11 +1,8 @@
 import { useState } from "react";
-import DashboardAdmin from "./DashboardAdminPage";
-import DetailLaporan from "./DetailLaporanPage";
+import DashboardAdmin from "./DashboardAdmin";
+import DetailLaporan from "./DetailLaporan";
+import RiwayatLaporan from "./RiwayatLaporan";
 
-/**
- * AdminApp — entry point for the admin branch.
- * Routes between: dashboard → detail laporan
- */
 export default function AdminApp() {
   const [screen, setScreen] = useState("dashboard");
   const [selectedLaporan, setSelectedLaporan] = useState(null);
@@ -14,7 +11,19 @@ export default function AdminApp() {
     return (
       <DetailLaporan
         laporan={selectedLaporan}
-        onKembali={() => setScreen("dashboard")}
+        onKembali={() => setScreen(selectedLaporan?._from || "dashboard")}
+      />
+    );
+  }
+
+  if (screen === "riwayat") {
+    return (
+      <RiwayatLaporan
+        onBeranda={() => setScreen("dashboard")}
+        onDetailLaporan={(item) => {
+          setSelectedLaporan({ ...item, _from: "riwayat" });
+          setScreen("detail");
+        }}
       />
     );
   }
@@ -22,10 +31,11 @@ export default function AdminApp() {
   return (
     <DashboardAdmin
       onDetailLaporan={(item) => {
-        setSelectedLaporan(item);
+        setSelectedLaporan({ ...item, _from: "dashboard" });
         setScreen("detail");
       }}
-      onLihatSemua={() => alert("Lihat Semua diklik")}
+      onLihatSemua={() => setScreen("riwayat")}
+      onLaporan={() => setScreen("riwayat")}
     />
   );
 }
