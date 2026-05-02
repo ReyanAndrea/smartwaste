@@ -1,98 +1,130 @@
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import logo from "../assets/logo.png";
 
-export default function WelcomePage() {
+export default function Welcomepage() {
   const navigate = useNavigate();
+
+  const btnIn = (e) => {
+    e.currentTarget.style.transform = "translateX(-50%) scale(1.06)";
+    e.currentTarget.style.boxShadow = "0 10px 18px rgba(0,0,0,.18)";
+  };
+
+  const btnOut = (e) => {
+    e.currentTarget.style.transform = "translateX(-50%) scale(1)";
+    e.currentTarget.style.boxShadow = "none";
+  };
 
   return (
     <div style={{
-      minHeight: '100vh',
-      background: 'linear-gradient(180deg, #f5f0e8 0%, #e8dcc8 100%)',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontFamily: "'Poppins', sans-serif",
-      position: 'relative',
-      overflow: 'hidden',
+      width:"100%",
+      minHeight:"100vh",
+      display:"flex",
+      justifyContent:"center",
+      background:"#dcdcdc",
+      paddingTop:"10px",
+      margin:0
     }}>
-      {/* Wave bottom decoration */}
       <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '200px',
-        background: '#c8b89a',
-        clipPath: 'ellipse(60% 100% at 50% 100%)',
-      }} />
-      <div style={{
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: '150px',
-        background: '#b8a888',
-        clipPath: 'ellipse(55% 100% at 50% 100%)',
-        opacity: 0.6,
-      }} />
+        width:"820px",
+        height:"100vh",
+        background:"#a8c28f",
+        position:"relative",
+        overflow:"hidden"
+      }}>
 
-      {/* Content */}
-      <div style={{ textAlign: 'center', zIndex: 1, padding: '2rem' }}>
-        {/* Trash bin icon */}
+        {/* TITLE */}
         <div style={{
-          width: '140px',
-          height: '140px',
-          margin: '0 auto 2rem',
-          position: 'relative',
+          position:"absolute",
+          top:"95px",
+          width:"100%",
+          textAlign:"center",
+          fontSize:"28px",
+          fontWeight:"800",
+          whiteSpace:"nowrap",
+          fontFamily:"Poppins, sans-serif"
         }}>
-          <svg viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-            {/* Bin body */}
-            <rect x="25" y="45" width="90" height="80" rx="8" fill="#8B5E3C"/>
-            {/* Bin lid */}
-            <rect x="20" y="32" width="100" height="16" rx="4" fill="#7A5230"/>
-            {/* Handle */}
-            <rect x="55" y="22" width="30" height="12" rx="6" fill="#7A5230"/>
-            {/* Recycle symbol */}
-            <circle cx="70" cy="85" r="28" fill="#5B8A3C" opacity="0.9"/>
-            {/* Arrows of recycle */}
-            <path d="M70 65 L80 78 L74 78 L74 90 L66 90 L66 78 L60 78 Z" fill="white" transform="rotate(0 70 85)"/>
-            <path d="M70 65 L80 78 L74 78 L74 90 L66 90 L66 78 L60 78 Z" fill="white" transform="rotate(120 70 85)"/>
-            <path d="M70 65 L80 78 L74 78 L74 90 L66 90 L66 78 L60 78 Z" fill="white" transform="rotate(240 70 85)"/>
-            {/* WiFi signal */}
-            <path d="M58 30 Q70 22 82 30" stroke="#5B8A3C" strokeWidth="3" fill="none" strokeLinecap="round"/>
-            <path d="M52 24 Q70 14 88 24" stroke="#5B8A3C" strokeWidth="3" fill="none" strokeLinecap="round"/>
-            <circle cx="70" cy="36" r="3" fill="#5B8A3C"/>
-          </svg>
+          <span style={{color:"#ffffff"}}>Welcome to </span>
+          <span style={{color:"#D2D0A0"}}>Smart</span>
+          <span style={{color:"#6F4E37"}}>Waste!</span>
         </div>
 
-        <h1 style={{
-          fontSize: '28px',
-          fontWeight: '700',
-          color: '#2d2d2d',
-          marginBottom: '0.5rem',
-          letterSpacing: '-0.5px',
-        }}>
-          Welcome to <span style={{ color: '#5B8A3C' }}>Smart</span><span style={{ color: '#8B5E3C' }}>Waste!</span>
-        </h1>
-
-        <button
-          onClick={() => navigate('/landing')}
+        {/* LOGO */}
+        <img
+          src={logo}
+          alt="logo"
           style={{
-            marginTop: '2.5rem',
-            background: '#8B5E3C',
-            color: 'white',
-            border: 'none',
-            borderRadius: '30px',
-            padding: '14px 60px',
-            fontSize: '16px',
-            fontWeight: '600',
-            cursor: 'pointer',
-            fontFamily: "'Poppins', sans-serif",
-            boxShadow: '0 4px 15px rgba(139,94,60,0.4)',
+            position:"absolute",
+            top:"220px",
+            left:"48%",
+            transform:"translateX(-50%)",
+            width:"180px",
+            height:"auto"
+          }}
+        />
+
+        {/* BUTTON */}
+        <button
+          onClick={() => navigate("/landing")}
+          onMouseEnter={btnIn}
+          onMouseLeave={btnOut}
+          style={{
+            position:"absolute",
+            top:"570px",
+            left:"50%",
+            transform:"translateX(-50%)",
+            width:"145px",
+            height:"42px",
+            border:"none",
+            borderRadius:"30px",
+            background:"#734d35",
+            color:"#fff",
+            fontSize:"18px",
+            fontWeight:"700",
+            cursor:"pointer",
+            transition:"all .25s ease"
           }}
         >
           Mulai
         </button>
+
+        {/* ZIGZAG */}
+        <div style={{
+          position:"absolute",
+          left:0,
+          right:0,
+          bottom:"0"
+        }}>
+          <div style={{
+            height:"24px",
+            background:`
+              linear-gradient(-45deg, transparent 12px, #734d35 0),
+              linear-gradient(45deg, transparent 12px, #734d35 0)
+            `,
+            backgroundSize:"24px 24px"
+          }} />
+
+          <div style={{
+            height:"24px",
+            marginTop:"8px",
+            background:`
+              linear-gradient(-45deg, transparent 12px, #b68762 0),
+              linear-gradient(45deg, transparent 12px, #b68762 0)
+            `,
+            backgroundSize:"24px 24px"
+          }} />
+
+          <div style={{
+            height:"24px",
+            marginTop:"8px",
+            background:`
+              linear-gradient(-45deg, transparent 12px, #ebb27b 0),
+              linear-gradient(45deg, transparent 12px, #ebb27b 0)
+            `,
+            backgroundSize:"24px 24px"
+          }} />
+        </div>
+
       </div>
     </div>
   );
