@@ -9,55 +9,72 @@ export default function AdminApp() {
   const [screen, setScreen] = useState("dashboard");
   const [selectedLaporan, setSelectedLaporan] = useState(null);
 
-  if (screen === "detail") {
+  const renderScreen = () => {
+    if (screen === "detail") {
+      return (
+        <DetailLaporanPage
+          laporan={selectedLaporan}
+          onKembali={() => setScreen(selectedLaporan?._from || "dashboard")}
+        />
+      );
+    }
+    if (screen === "riwayat") {
+      return (
+        <RiwayatLaporanPage
+          onBeranda={() => setScreen("dashboard")}
+          onLaporan={() => setScreen("riwayat")}
+          onProfil={() => setScreen("profil")}
+          onDetailLaporan={(item) => {
+            setSelectedLaporan({ ...item, _from: "riwayat" });
+            setScreen("detail");
+          }}
+        />
+      );
+    }
+    if (screen === "profil") {
+      return (
+        <ProfilePage
+          onBeranda={() => setScreen("dashboard")}
+          onLaporan={() => setScreen("riwayat")}
+          onTentangSistem={() => setScreen("tentang")}
+          onLogout={() => setScreen("dashboard")}
+        />
+      );
+    }
+    if (screen === "tentang") {
+      return <TentangSistemPage onKembali={() => setScreen("profil")} />;
+    }
     return (
-      <DetailLaporanPage
-        laporan={selectedLaporan}
-        onKembali={() => setScreen(selectedLaporan?._from || "dashboard")}
-      />
-    );
-  }
-
-  if (screen === "riwayat") {
-    return (
-      <RiwayatLaporanPage
-        onBeranda={() => setScreen("dashboard")}
-        onLaporan={() => setScreen("riwayat")}
-        onProfil={() => setScreen("profil")}
+      <DashboardAdminPage
         onDetailLaporan={(item) => {
-          setSelectedLaporan({ ...item, _from: "riwayat" });
+          setSelectedLaporan({ ...item, _from: "dashboard" });
           setScreen("detail");
         }}
-      />
-    );
-  }
-
-  if (screen === "profil") {
-    return (
-      <ProfilePage
-        onBeranda={() => setScreen("dashboard")}
+        onLihatSemua={() => setScreen("riwayat")}
         onLaporan={() => setScreen("riwayat")}
-        onTentangSistem={() => setScreen("tentang")}
-        onLogout={() => setScreen("dashboard")}
+        onProfil={() => setScreen("profil")}
       />
     );
-  }
-
-  if (screen === "tentang") {
-    return (
-      <TentangSistemPage onKembali={() => setScreen("profil")} />
-    );
-  }
+  };
 
   return (
-    <DashboardAdminPage
-      onDetailLaporan={(item) => {
-        setSelectedLaporan({ ...item, _from: "dashboard" });
-        setScreen("detail");
-      }}
-      onLihatSemua={() => setScreen("riwayat")}
-      onLaporan={() => setScreen("riwayat")}
-      onProfil={() => setScreen("profil")}
-    />
+    <div style={{
+      width: "100%",
+      minHeight: "100vh",
+      backgroundColor: "#4A7C59",
+      display: "flex",
+      justifyContent: "center",
+    }}>
+      <div style={{
+        width: "100%",
+        maxWidth: "100%",
+        minHeight: "100vh",
+        position: "relative",
+      }}>
+        {renderScreen()}
+
+        
+      </div>
+    </div>
   );
 }
