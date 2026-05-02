@@ -277,7 +277,9 @@ const styles = {
   bottomNav: {
     position: "fixed",
     bottom: 0,
-    width: 390,
+    width: "100%",
+    left: 0,
+    right: 0,
     backgroundColor: "#EDE8D0",
     display: "flex",
     justifyContent: "space-around",
