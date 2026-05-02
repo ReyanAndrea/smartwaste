@@ -1,10 +1,43 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.png";
+import api from "../api/axios";
 
 export default function Registerpage() {
   const navigate = useNavigate();
   const [showPopup, setShowPopup] = useState(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleRegister = async () => {
+    if (!name || !email || !password || !confirmPassword) {
+      setError("Semua field harus diisi");
+      return;
+    }
+    if (password.length < 8) {
+      setError("Kata sandi minimal 8 karakter");
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Kata sandi tidak cocok");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setError("");
+      await api.post("/auth/register", { name, email, password });
+      setShowPopup(true);
+    } catch (err) {
+      setError(err.response?.data?.message || "Registrasi gagal");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const inputStyle = {
     width: "100%",
@@ -46,8 +79,6 @@ export default function Registerpage() {
           borderBottomLeftRadius:"50% 70px",
           borderBottomRightRadius:"50% 70px"
         }}>
-
-          {/* LOGO CENTER */}
           <div style={{
             display:"flex",
             justifyContent:"center",
@@ -56,11 +87,7 @@ export default function Registerpage() {
             marginTop:"55px"
           }}>
             <img src={logo} style={{width:"24px"}} />
-
-            <div style={{
-              fontSize:"30px",
-              fontWeight:"800"
-            }}>
+            <div style={{fontSize:"30px", fontWeight:"800"}}>
               <span style={{color:"#D2D0A0"}}>Smart</span>
               <span style={{color:"#6F4E37"}}>Waste</span>
             </div>
@@ -68,81 +95,86 @@ export default function Registerpage() {
         </div>
 
         {/* FORM */}
-        <div style={{
-          padding:"22px 48px"
-        }}>
-          <div style={{
-            textAlign:"center",
-            color:"#fff",
-            fontSize:"28px",
-            fontWeight:"800"
-          }}>
+        <div style={{padding:"22px 48px"}}>
+          <div style={{textAlign:"center", color:"#fff", fontSize:"28px", fontWeight:"800"}}>
             Daftar Akun
           </div>
 
-          <div style={{
-            textAlign:"center",
-            color:"#eef3eb",
-            fontSize:"15px",
-            marginTop:"8px"
-          }}>
+          <div style={{textAlign:"center", color:"#eef3eb", fontSize:"15px", marginTop:"8px"}}>
             Sudah mempunyai akun?{" "}
             <span
               onClick={()=>navigate("/login")}
-              style={{
-                color:"#557f59",
-                fontWeight:"700",
-                cursor:"pointer"
-              }}
+              style={{color:"#557f59", fontWeight:"700", cursor:"pointer"}}
             >
               Log in
             </span>
           </div>
 
-          <div style={{
-            marginTop:"28px",
-            display:"grid",
-            gap:"18px"
-          }}>
-            <input placeholder="Masukkan nama" style={inputStyle}/>
-            <input placeholder="Masukkan email" style={inputStyle}/>
-            <input placeholder="Masukkan nomor hp" style={inputStyle}/>
-            <input placeholder="Masukkan kata sandi" type="password" style={inputStyle}/>
-
+          {/* ERROR */}
+          {error && (
             <div style={{
-              color:"#eef3eb",
+              background:"#ff4d4d",
+              color:"#fff",
+              padding:"10px",
+              borderRadius:"8px",
+              marginTop:"12px",
               fontSize:"13px",
-              marginTop:"-8px"
+              textAlign:"center"
             }}>
+              {error}
+            </div>
+          )}
+
+          <div style={{marginTop:"28px", display:"grid", gap:"18px"}}>
+            <input
+              placeholder="Masukkan nama"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              placeholder="Masukkan email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={inputStyle}
+            />
+            <input
+              placeholder="Masukkan kata sandi"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              style={inputStyle}
+            />
+            <div style={{color:"#eef3eb", fontSize:"13px", marginTop:"-8px"}}>
               Gunakan kata sandi dengan minimal 8 karakter
             </div>
-
-            <input placeholder="Konfirmasi kata sandi" type="password" style={inputStyle}/>
+            <input
+              placeholder="Konfirmasi kata sandi"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              style={inputStyle}
+            />
           </div>
 
           <button
-            onClick={()=>setShowPopup(true)}
+            onClick={handleRegister}
+            disabled={loading}
             style={{
               width:"100%",
               height:"50px",
               border:"none",
               borderRadius:"28px",
-              background:"#b4825d",
+              background: loading ? "#999" : "#b4825d",
               color:"#fff",
               fontSize:"20px",
               fontWeight:"700",
               marginTop:"28px",
-              cursor:"pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               transition:"0.25s"
             }}
-            onMouseEnter={(e)=>{
-              e.currentTarget.style.transform="scale(1.04)";
-            }}
-            onMouseLeave={(e)=>{
-              e.currentTarget.style.transform="scale(1)";
-            }}
           >
-            Daftar
+            {loading ? "Memuat..." : "Daftar"}
           </button>
         </div>
 
@@ -177,16 +209,9 @@ export default function Registerpage() {
                 alignItems:"center",
                 fontSize:"58px",
                 color:"#557f59"
-              }}>
-                ✓
-              </div>
+              }}>✓</div>
 
-              <div style={{
-                color:"#fff",
-                fontSize:"30px",
-                fontWeight:"800",
-                marginTop:"26px"
-              }}>
+              <div style={{color:"#fff", fontSize:"30px", fontWeight:"800", marginTop:"26px"}}>
                 Pendaftaran Berhasil!
               </div>
 
@@ -212,21 +237,11 @@ export default function Registerpage() {
 
         <style>{`
           @keyframes popup{
-            from{
-              transform:scale(.4);
-              opacity:0;
-            }
-            to{
-              transform:scale(1);
-              opacity:1;
-            }
+            from{ transform:scale(.4); opacity:0; }
+            to{ transform:scale(1); opacity:1; }
           }
-
-          input::placeholder{
-            color:#eef3eb;
-          }
+          input::placeholder{ color:#eef3eb; }
         `}</style>
-
       </div>
     </div>
   );
