@@ -1,309 +1,159 @@
-import { useState } from "react";
-
-const ALL_LAPORAN = [
-  {
-    id: 1,
-    title: "Tumpukan sampah di jalan...",
-    time: "30 Menit yang lalu",
-    status: "Selesai",
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=80&h=80&fit=crop",
-  },
-  {
-    id: 2,
-    title: "Sampah berserakan di depan...",
-    time: "1 Jam yang lalu",
-    status: "Belum Diproses",
-    img: "https://images.unsplash.com/photo-1611735341450-74d61e660ad2?w=80&h=80&fit=crop",
-  },
-  {
-    id: 3,
-    title: "Selokan tersumbat plastik...",
-    time: "5 Jam yang lalu",
-    status: "Diproses",
-    img: "https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=80&h=80&fit=crop",
-  },
-  {
-    id: 4,
-    title: "Pinggir sungai dipenuhi...",
-    time: "12 Jam yang lalu",
-    status: "Diproses",
-    img: "https://images.unsplash.com/photo-1562077772-3bd90403f7f0?w=80&h=80&fit=crop",
-  },
-  {
-    id: 5,
-    title: "Sampah berserak di tepi jalan",
-    time: "1 Hari yang lalu",
-    status: "Selesai",
-    img: "https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=80&h=80&fit=crop",
-  },
-  {
-    id: 6,
-    title: "Sungai Krueng terlihat sampah",
-    time: "1 Hari yang lalu",
-    status: "Selesai",
-    img: "https://images.unsplash.com/photo-1567518284931-10df0e55e421?w=80&h=80&fit=crop",
-  },
-  {
-    id: 7,
-    title: "Pinggir Lapangan terlihat sampah",
-    time: "1 Hari yang lalu",
-    status: "Selesai",
-    img: "https://images.unsplash.com/photo-1604187351574-c75ca79f5807?w=80&h=80&fit=crop",
-  },
-  {
-    id: 8,
-    title: "PinggirJalan terlihat sampah",
-    time: "1 Hari yang lalu",
-    status: "Selesai",
-    img: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=80&h=80&fit=crop",
-  },
-  {
-    id: 9,
-    title: "Pinggir Jalan terlihat sampah",
-    time: "1 Hari yang lalu",
-    status: "Selesai",
-    img: "https://images.unsplash.com/photo-1611735341450-74d61e660ad2?w=80&h=80&fit=crop",
-  },
-];
+import { useState, useEffect } from "react";
+import api from "../api/axios";
 
 const TABS = ["Semua", "Belum Diproses", "Diproses", "Selesai"];
 
 const STATUS_COLOR = {
-  Selesai: { bg: "#2D5A3D", text: "#fff" },
-  Diproses: { bg: "#D4860A", text: "#fff" },
-  "Belum Diproses": { bg: "#C0392B", text: "#fff" },
+  Selesai: "#6aa06f",
+  Diproses: "#4f9bb3",
+  "Belum Diproses": "#b4825d",
 };
 
 export default function RiwayatLaporan({ onKembali, onDetailLaporan, onBeranda, onProfil }) {
   const [activeTab, setActiveTab] = useState("Semua");
   const [activeNav, setActiveNav] = useState("laporan");
+  const [laporan, setLaporan] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const filtered =
-    activeTab === "Semua"
-      ? ALL_LAPORAN
-      : ALL_LAPORAN.filter((l) => l.status === activeTab);
+  useEffect(() => {
+    fetchLaporan();
+  }, []);
+
+  const fetchLaporan = async () => {
+    try {
+      const res = await api.get("/laporan");
+      setLaporan(res.data);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getStatusLabel = (status) => {
+    if (status === "menunggu") return "Belum Diproses";
+    if (status === "diproses") return "Diproses";
+    return "Selesai";
+  };
+
+  const formatTime = (dateStr) => {
+    const diff = Math.floor((new Date() - new Date(dateStr)) / 1000 / 60);
+    if (diff < 60) return `${diff} menit yang lalu`;
+    if (diff < 1440) return `${Math.floor(diff / 60)} jam yang lalu`;
+    return `${Math.floor(diff / 1440)} hari yang lalu`;
+  };
+
+  const filtered = activeTab === "Semua"
+    ? laporan
+    : laporan.filter((l) => getStatusLabel(l.status) === activeTab);
 
   return (
-    <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.headerSpacer} />
-        <div style={styles.headerTitle}>Semua Laporan</div>
-        <div style={styles.trashIcon}>🗑️</div>
+    <div style={{
+      width: "100%", maxWidth: "430px", minHeight: "100vh",
+      background: "#a8c28f", fontFamily: "Poppins, sans-serif",
+      display: "flex", flexDirection: "column", paddingBottom: 100, margin: "0 auto",
+    }}>
+      {/* HEADER */}
+      <div style={{ padding: "28px 24px 0" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ fontSize: 24, fontWeight: "700", color: "#fff", flex: 1, textAlign: "center" }}>
+            Semua Laporan
+          </div>
+          <div style={{ fontSize: 24 }}>🗑️</div>
+        </div>
       </div>
 
-      {/* Filter Tabs */}
-      <div style={styles.tabRow}>
-        {TABS.map((tab) => (
-          <button
-            key={tab}
-            style={{
-              ...styles.tabBtn,
-              ...(activeTab === tab ? styles.tabActive : styles.tabInactive),
-            }}
-            onClick={() => setActiveTab(tab)}
-          >
-            {tab}
-          </button>
-        ))}
-      </div>
-
-      {/* List */}
-      <div style={styles.listWrapper}>
-        {filtered.length === 0 && (
-          <div style={styles.empty}>Tidak ada laporan</div>
-        )}
-        {filtered.map((item) => {
-          const sc = STATUS_COLOR[item.status];
-          return (
-            <div
-              key={item.id}
-              style={styles.card}
-              onClick={() => onDetailLaporan && onDetailLaporan(item)}
+      {/* BODY */}
+      <div style={{
+        background: "#557f59", borderTopLeftRadius: 60, borderTopRightRadius: 60,
+        padding: "26px 16px", flex: 1, marginTop: 20,
+      }}>
+        {/* Filter Tabs */}
+        <div style={{ display: "flex", gap: 8, marginBottom: 16, flexWrap: "wrap" }}>
+          {TABS.map((tab) => (
+            <button
+              key={tab}
+              onClick={() => setActiveTab(tab)}
+              style={{
+                padding: "7px 14px", borderRadius: 20, border: "none",
+                fontSize: 12, fontWeight: "700", cursor: "pointer",
+                background: activeTab === tab ? "#2D5A3D" : "#6A9E7A",
+                color: "#fff", whiteSpace: "nowrap",
+              }}
             >
-              <img src={item.img} alt="" style={styles.cardImg} />
-              <div style={styles.cardContent}>
-                <div style={styles.cardTitle}>{item.title}</div>
-                <div style={styles.cardTime}>{item.time}</div>
-              </div>
-              <div
-                style={{
-                  ...styles.statusBadge,
-                  backgroundColor: sc.bg,
-                  color: sc.text,
-                }}
-              >
-                {item.status}
-              </div>
-            </div>
-          );
-        })}
+              {tab}
+            </button>
+          ))}
+        </div>
+
+        {/* List */}
+        <div style={{ background: "#dfe8dc", borderRadius: 28, padding: "10px 12px" }}>
+          {loading ? (
+            <div style={{ textAlign: "center", padding: 20, color: "#557f59" }}>Memuat...</div>
+          ) : filtered.length === 0 ? (
+            <div style={{ textAlign: "center", padding: 20, color: "#557f59" }}>Tidak ada laporan</div>
+          ) : (
+            filtered.map((item, index) => {
+              const label = getStatusLabel(item.status);
+              return (
+                <div key={item.id}>
+                  <div
+                    style={{ display: "flex", gap: 10, alignItems: "center", padding: "13px 0", cursor: "pointer" }}
+                    onClick={() => onDetailLaporan && onDetailLaporan(item)}
+                  >
+                    <img
+                      src={`http://localhost:5000/uploads/${item.photo}`}
+                      alt=""
+                      style={{ width: 62, height: 62, borderRadius: 18, objectFit: "cover", flexShrink: 0 }}
+                    />
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontWeight: "700", fontSize: 14, color: "#2f2f2f" }}>{item.title}</div>
+                      <div style={{ color: "#666", fontSize: 12, marginTop: 4 }}>{formatTime(item.created_at)}</div>
+                    </div>
+                    <div style={{
+                      background: STATUS_COLOR[label],
+                      color: "#fff", padding: "5px 12px",
+                      borderRadius: 14, fontSize: 11, fontWeight: "600",
+                      minWidth: 82, textAlign: "center", flexShrink: 0,
+                    }}>
+                      {label}
+                    </div>
+                  </div>
+                  {index !== filtered.length - 1 && (
+                    <div style={{ height: 1, background: "#a07b5e", opacity: 0.4 }} />
+                  )}
+                </div>
+              );
+            })
+          )}
+        </div>
       </div>
 
-      {/* Bottom Nav */}
-      <div style={styles.bottomNav}>
-        <div
-          style={{ ...styles.navItem, ...(activeNav === "beranda" ? styles.navActive : {}) }}
-          onClick={() => { setActiveNav("beranda"); onBeranda && onBeranda(); }}
-        >
-          <span style={styles.navIcon}>⊞</span>
-          <span style={styles.navLabel}>Beranda</span>
+      {/* FOOTER */}
+      <div style={{
+        position: "fixed", bottom: 14, left: "50%", transform: "translateX(-50%)",
+        width: "calc(100% - 40px)", maxWidth: "390px", height: 72,
+        background: "#d7d39c", borderRadius: 38,
+        display: "flex", justifyContent: "space-around", alignItems: "center",
+        padding: "0 10px", zIndex: 999,
+      }}>
+        <div onClick={() => { setActiveNav("beranda"); onBeranda && onBeranda(); }} style={menuItem(activeNav === "beranda" ? "#a8b97d" : "transparent")}>
+          <div style={{ fontSize: 22 }}>⊞</div>Beranda
         </div>
-        <div
-          style={{ ...styles.navItem, ...(activeNav === "laporan" ? styles.navActive : {}) }}
-          onClick={() => setActiveNav("laporan")}
-        >
-          <span style={styles.navIcon}>🗑</span>
-          <span style={styles.navLabel}>Laporan</span>
+        <div onClick={() => setActiveNav("laporan")} style={menuItem(activeNav === "laporan" ? "#a8b97d" : "transparent")}>
+          <div style={{ fontSize: 22 }}>🗑</div>Laporan
         </div>
-        <div
-          style={{ ...styles.navItem, ...(activeNav === "profil" ? styles.navActive : {}) }}
-          onClick={() => { setActiveNav("profil"); onProfil && onProfil(); }}
-        >
-          <span style={styles.navIcon}>👤</span>
-          <span style={styles.navLabel}>Profil</span>
+        <div onClick={() => { setActiveNav("profil"); onProfil && onProfil(); }} style={menuItem(activeNav === "profil" ? "#a8b97d" : "transparent")}>
+          <div style={{ fontSize: 22 }}>👤</div>Profil
         </div>
       </div>
     </div>
   );
 }
 
-const styles = {
-  container: {
-    width: 390,
-    minHeight: 844,
-    backgroundColor: "#4A7C59",
-    fontFamily: "'Segoe UI', sans-serif",
-    display: "flex",
-    flexDirection: "column",
-    paddingBottom: 80,
-  },
-  header: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "56px 20px 16px",
-  },
-  headerSpacer: {
-    width: 40,
-  },
-  headerTitle: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 20,
-    textAlign: "center",
-    flex: 1,
-  },
-  trashIcon: {
-    fontSize: 24,
-    width: 40,
-    textAlign: "right",
-  },
-  tabRow: {
-    display: "flex",
-    gap: 8,
-    padding: "0 16px 16px",
-    flexWrap: "wrap",
-  },
-  tabBtn: {
-    border: "none",
-    borderRadius: 20,
-    padding: "7px 14px",
-    fontSize: 12,
-    fontWeight: "600",
-    cursor: "pointer",
-    whiteSpace: "nowrap",
-  },
-  tabActive: {
-    backgroundColor: "#2D5A3D",
-    color: "#fff",
-  },
-  tabInactive: {
-    backgroundColor: "#6A9E7A",
-    color: "#fff",
-  },
-  listWrapper: {
-    flex: 1,
-    padding: "0 16px",
-    display: "flex",
-    flexDirection: "column",
-    gap: 10,
-    overflowY: "auto",
-  },
-  card: {
-    backgroundColor: "#5A8F6A",
-    borderRadius: 14,
-    display: "flex",
-    alignItems: "center",
-    padding: "10px 12px",
-    gap: 12,
-    cursor: "pointer",
-  },
-  cardImg: {
-    width: 56,
-    height: 56,
-    borderRadius: 10,
-    objectFit: "cover",
-    flexShrink: 0,
-  },
-  cardContent: {
-    flex: 1,
-  },
-  cardTitle: {
-    color: "#fff",
-    fontWeight: "600",
-    fontSize: 13,
-    marginBottom: 3,
-  },
-  cardTime: {
-    color: "#C8DFC9",
-    fontSize: 12,
-  },
-  statusBadge: {
-    borderRadius: 20,
-    padding: "5px 12px",
-    fontSize: 11,
-    fontWeight: "700",
-    whiteSpace: "nowrap",
-    flexShrink: 0,
-  },
-  empty: {
-    color: "#C8DFC9",
-    textAlign: "center",
-    marginTop: 40,
-    fontSize: 14,
-  },
-  bottomNav: {
-    position: "fixed",
-    bottom: 0,
-    width: "100%",
-    left: 0,
-    right: 0,
-    backgroundColor: "#EDE8D0",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    padding: "10px 0 16px",
-    borderTop: "1px solid rgba(0,0,0,0.08)",
-  },
-  navItem: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 4,
-    cursor: "pointer",
-    padding: "4px 20px",
-    borderRadius: 12,
-  },
-  navActive: {
-    backgroundColor: "rgba(74,124,89,0.15)",
-  },
-  navIcon: {
-    fontSize: 20,
-  },
-  navLabel: {
-    fontSize: 11,
-    color: "#4A7C59",
-    fontWeight: "600",
-  },
-};
+function menuItem(bg) {
+  return {
+    width: 68, textAlign: "center", fontSize: 12, fontWeight: "600",
+    color: "#6b4d34", cursor: "pointer", padding: "8px 4px", borderRadius: 18, background: bg,
+  };
+}
