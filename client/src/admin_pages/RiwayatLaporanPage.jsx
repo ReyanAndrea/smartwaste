@@ -102,7 +102,7 @@ export default function RiwayatLaporan({ onKembali, onDetailLaporan, onBeranda, 
                     onClick={() => onDetailLaporan && onDetailLaporan(item)}
                   >
                     <img
-                      src={`http://localhost:5000/uploads/${item.photo}`}
+                      src={item.photo}
                       alt=""
                       style={{ width: 62, height: 62, borderRadius: 18, objectFit: "cover", flexShrink: 0 }}
                     />

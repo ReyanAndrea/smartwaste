@@ -151,7 +151,7 @@ export default function Dashboard() {
                 <div key={item.id} onClick={() => navigate(`/detail/${item.id}`)} style={{ cursor: "pointer" }}>
                   <div style={{ display: "flex", gap: "14px", alignItems: "center", padding: "10px 0" }}>
                     <img
-                      src={`https://server-production-9743.up.railway.app/api/uploads/${item.photo}`}
+                      src={item.photo}
                       style={{ width: "56px", height: "56px", objectFit: "cover", borderRadius: "18px" }}
                     />
                     <div style={{ flex: 1 }}>

@@ -143,7 +143,7 @@ export default function DetailLaporan({ onKembali, laporan }) {
         {/* Image */}
         <div style={{ position: "relative", borderRadius: 16, overflow: "hidden" }}>
           <img
-            src={`http://localhost:5000/uploads/${detail?.photo}`}
+            src={detail?.photo}
             alt=""
             style={{ width: "100%", height: 200, objectFit: "cover", borderRadius: 16, display: "block" }}
           />

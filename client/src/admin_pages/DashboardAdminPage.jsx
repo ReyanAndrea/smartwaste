@@ -108,7 +108,7 @@ export default function DashboardAdmin({ onDetailLaporan, onLihatSemua, onLapora
               <div key={item.id}>
                 <div style={{ display: "flex", alignItems: "flex-start", padding: "10px 4px", gap: 12 }}>
                   <img
-                    src={`http://localhost:5000/uploads/${item.photo}`}
+                   src={item.photo}
                     alt=""
                     style={{ width: 56, height: 56, borderRadius: 14, objectFit: "cover", flexShrink: 0 }}
                   />
