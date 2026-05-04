@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://smartwastee.vercel.app/api",
+  baseURL: "https://smartwastee.vercel.app",
 });
 
 api.interceptors.request.use((config) => {
