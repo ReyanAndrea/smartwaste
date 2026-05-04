@@ -8,7 +8,7 @@ export const createLaporan = async (req, res) => {
       description,
       location
     } = req.body;
-    const photo = req.file ? req.file.filename : null;
+    const photo = req.file ? req.file.path : null;
 
     if (!title || !description || !location || !photo) {
       return res.status(400).json({
