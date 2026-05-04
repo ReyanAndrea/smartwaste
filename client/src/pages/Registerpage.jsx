@@ -30,7 +30,7 @@ export default function Registerpage() {
     try {
       setLoading(true);
       setError("");
-      await api.post("/auth/register", { name, email, password });
+      await api.post("/api/auth/register", { name, email, password });
       setShowPopup(true);
     } catch (err) {
       setError(err.response?.data?.message || "Registrasi gagal");

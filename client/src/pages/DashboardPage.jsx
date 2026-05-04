@@ -22,7 +22,7 @@ export default function Dashboard() {
 
   const fetchData = async () => {
   try {
-    const laporanRes = await api.get("/laporan/my");
+    const laporanRes = await api.get("/api/laporan/my");
     const semua = laporanRes.data;
     
     setLaporan(semua.slice(0, 4));
@@ -151,7 +151,7 @@ export default function Dashboard() {
                 <div key={item.id} onClick={() => navigate(`/detail/${item.id}`)} style={{ cursor: "pointer" }}>
                   <div style={{ display: "flex", gap: "14px", alignItems: "center", padding: "10px 0" }}>
                     <img
-                      src={`http://localhost:5000/uploads/${item.photo}`}
+                      src={`https://server-production-9743.up.railway.app/api/uploads/${item.photo}`}
                       style={{ width: "56px", height: "56px", objectFit: "cover", borderRadius: "18px" }}
                     />
                     <div style={{ flex: 1 }}>

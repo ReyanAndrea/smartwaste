@@ -15,7 +15,7 @@ export default function HistoryPage() {
 
   const fetchLaporan = async () => {
     try {
-      const res = await api.get("/laporan/my");
+      const res = await api.get("/api/laporan/my");
       setData(res.data);
     } catch (err) {
       console.error(err);
@@ -130,7 +130,7 @@ export default function HistoryPage() {
                 <div key={item.id}>
                   <div style={{ display: "flex", gap: "10px", alignItems: "center", padding: "13px 0" }}>
                     <img
-                      src={`http://localhost:5000/uploads/${item.photo}`}
+                      src={`https://server-production-9743.up.railway.app/api/uploads/${item.photo}`}
                       alt=""
                       style={{ width: "62px", height: "62px", borderRadius: "18px", objectFit: "cover" }}
                     />

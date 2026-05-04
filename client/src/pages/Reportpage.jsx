@@ -52,7 +52,7 @@ const handleGetLokasi = () => {
       formData.append("location", lokasi);
       formData.append("photo", foto);
 
-      await api.post("/laporan", formData, {
+      await api.post("/api/laporan", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

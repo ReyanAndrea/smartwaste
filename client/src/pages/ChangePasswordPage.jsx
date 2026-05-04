@@ -42,7 +42,7 @@ export default function ChangePasswordPage() {
     try {
       setLoading(true);
       setError("");
-      await api.put("/auth/change-password", {
+      await api.put("/api/auth/change-password", {
         oldPassword: oldPass,
         newPassword: newPass,
       });

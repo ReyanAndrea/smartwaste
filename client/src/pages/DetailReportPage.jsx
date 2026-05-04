@@ -15,7 +15,7 @@ export default function DetailReportPage() {
 
   const fetchDetail = async () => {
     try {
-      const res = await api.get(`/laporan/${id}`);
+      const res = await api.get(`/api/laporan/${id}`);
       setLaporan(res.data);
     } catch (err) {
       console.error(err);
@@ -107,7 +107,7 @@ export default function DetailReportPage() {
           {/* TOP */}
           <div style={{ display: "flex", gap: "16px" }}>
             <img
-              src={`http://localhost:5000/uploads/${laporan.photo}`}
+              src={`https://server-production-9743.up.railway.app/api/uploads/${laporan.photo}`}
               alt=""
               style={{ width: "72px", height: "72px", borderRadius: "18px", objectFit: "cover" }}
             />

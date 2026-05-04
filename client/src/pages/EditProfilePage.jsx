@@ -31,7 +31,7 @@ export default function EditProfilePage() {
     try {
       setLoading(true);
       setError("");
-      const res = await api.put("/auth/profile", { name: nama, email });
+      const res = await api.put("/api/auth/profile", { name: nama, email });
 
       // Update localStorage
       const updatedUser = res.data.user;
