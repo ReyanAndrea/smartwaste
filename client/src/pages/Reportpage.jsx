@@ -14,6 +14,28 @@ export default function Reportpage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  const [loadingLokasi, setLoadingLokasi] = useState(false);
+
+const handleGetLokasi = () => {
+  if (!navigator.geolocation) {
+    setError("Browser tidak mendukung geolocation");
+    return;
+  }
+
+  setLoadingLokasi(true);
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+      setLokasi(`${latitude.toFixed(6)}, ${longitude.toFixed(6)}`);
+      setLoadingLokasi(false);
+    },
+    (err) => {
+      setError("Gagal mendapatkan lokasi. Pastikan izin lokasi diaktifkan.");
+      setLoadingLokasi(false);
+    }
+  );
+};
+
   const handleSubmit = async () => {
     if (!judul || !deskripsi || !lokasi || !foto) {
       setError("Lengkapi semua data dulu ya.");
@@ -133,12 +155,31 @@ export default function Reportpage() {
           />
 
           <div style={{ color: "#fff", fontSize: "14px", marginTop: "20px", marginBottom: "8px" }}>Lokasi kejadian *</div>
-          <input
-            value={lokasi}
-            onChange={(e) => setLokasi(e.target.value)}
-            placeholder="Masukkan alamat/lokasi"
-            style={inputStyle}
-          />
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+  <input
+    value={lokasi}
+    onChange={(e) => setLokasi(e.target.value)}
+    placeholder="Lokasi akan terisi otomatis"
+    style={{ ...inputStyle, flex: 1 }}
+    readOnly
+  />
+  <button
+    onClick={handleGetLokasi}
+    disabled={loadingLokasi}
+    style={{
+      background: loadingLokasi ? "#999" : "#557f59",
+      border: "none",
+      borderRadius: "22px",
+      padding: "14px 16px",
+      color: "#fff",
+      fontSize: "20px",
+      cursor: loadingLokasi ? "not-allowed" : "pointer",
+      flexShrink: 0,
+    }}
+  >
+    {loadingLokasi ? "⏳" : "📍"}
+  </button>
+</div>
 
           <div style={{ color: "#fff", fontSize: "14px", marginTop: "20px", marginBottom: "8px" }}>Foto bukti *</div>
           <label style={{
