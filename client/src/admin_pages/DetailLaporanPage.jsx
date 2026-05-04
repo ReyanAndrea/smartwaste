@@ -64,7 +64,7 @@ export default function DetailLaporan({ onKembali, laporan }) {
 
   const fetchDetail = async () => {
     try {
-      const res = await api.get(`/laporan/${laporan.id}`);
+      const res = await api.get(`/api/laporan/${laporan.id}`);
       setDetail(res.data);
       setStatus(res.data.status);
       const found = STATUS_OPTIONS.find(s => s.value === res.data.status);
@@ -78,7 +78,7 @@ export default function DetailLaporan({ onKembali, laporan }) {
 
   const handleKonfirmasi = async () => {
     try {
-      await api.put(`/laporan/${laporan.id}/status`, { status });
+      await api.put(`/api/laporan/${laporan.id}/status`, { status });
       setShowSuccess(true);
       setTimeout(() => setShowSuccess(false), 2000);
     } catch (err) {
@@ -88,7 +88,7 @@ export default function DetailLaporan({ onKembali, laporan }) {
 
   const handleHapus = async () => {
     try {
-      await api.delete(`/laporan/${laporan.id}`);
+      await api.delete(`/api/laporan/${laporan.id}`);
       setShowPopUpHapus(false);
       onKembali && onKembali();
     } catch (err) {

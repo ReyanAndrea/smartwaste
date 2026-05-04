@@ -21,7 +21,7 @@ export default function RiwayatLaporan({ onKembali, onDetailLaporan, onBeranda, 
 
   const fetchLaporan = async () => {
     try {
-      const res = await api.get("/laporan");
+      const res = await api.get("/api/laporan");
       setLaporan(res.data);
     } catch (err) {
       console.error(err);

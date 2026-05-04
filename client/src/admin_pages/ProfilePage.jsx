@@ -63,7 +63,7 @@ export default function ProfilAdmin({ onBeranda, onLaporan, onTentangSistem, onL
     try {
       setLoading(true);
       setError("");
-      const res = await api.put("/auth/profile", { name: nama, email });
+      const res = await api.put("/api/auth/profile", { name: nama, email });
       localStorage.setItem("user", JSON.stringify(res.data.user));
       setSuccess("Profil berhasil diperbarui!");
       setTimeout(() => setSuccess(""), 2000);

@@ -31,8 +31,8 @@ export default function DashboardAdmin({ onDetailLaporan, onLihatSemua, onLapora
   const fetchData = async () => {
     try {
       const [laporanRes, statistikRes] = await Promise.all([
-        api.get("/laporan"),
-        api.get("/laporan/statistik"),
+        api.get("/api/laporan"),
+        api.get("/api/laporan/statistik"),
       ]);
       setLaporan(laporanRes.data.slice(0, 4));
       setStatistik(statistikRes.data);
