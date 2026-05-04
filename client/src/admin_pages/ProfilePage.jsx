@@ -1,357 +1,202 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import api from "../api/axios";
 
 function PopUpLogout({ onYakin, onBatal }) {
   return (
-    <div style={popupStyles.overlay} onClick={onBatal}>
-      <div style={popupStyles.card} onClick={(e) => e.stopPropagation()}>
-        <div style={popupStyles.iconCircle}>
-          <span style={popupStyles.questionMark}>?</span>
+    <div style={{
+      position: "fixed", inset: 0, background: "rgba(0,0,0,0.35)",
+      display: "flex", justifyContent: "center", alignItems: "center", zIndex: 9999,
+    }}>
+      <div style={{
+        width: 340, background: "#D76464", borderRadius: 28,
+        padding: "34px 24px", textAlign: "center", color: "#fff",
+      }}>
+        <div style={{
+          width: 130, height: 130, borderRadius: "50%", background: "#d6e6d6",
+          margin: "0 auto", display: "flex", justifyContent: "center",
+          alignItems: "center", fontSize: 72, color: "#cc0000", border: "7px solid #cc0000",
+        }}>?</div>
+        <div style={{ marginTop: 24, fontSize: 28, fontWeight: "700" }}>
+          Yakin ingin keluar?
         </div>
-        <div style={popupStyles.title}>Yakin ingin keluar?</div>
-        <button style={popupStyles.yakinBtn} onClick={onYakin}>
-          Yakin
-        </button>
+        <div style={{ display: "flex", gap: 12, marginTop: 24 }}>
+          <button
+            onClick={onBatal}
+            style={{
+              flex: 1, height: 52, border: "none", borderRadius: 999,
+              background: "rgba(255,255,255,0.3)", fontSize: 16,
+              fontWeight: "700", cursor: "pointer", color: "#fff",
+            }}
+          >Batal</button>
+          <button
+            onClick={onYakin}
+            style={{
+              flex: 1, height: 52, border: "none", borderRadius: 999,
+              background: "#fff", fontSize: 16, fontWeight: "700", cursor: "pointer",
+            }}
+          >Yakin</button>
+        </div>
       </div>
     </div>
   );
 }
-
-const popupStyles = {
-  overlay: {
-    position: "fixed",
-    inset: 0,
-    backgroundColor: "rgba(0,0,0,0.4)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    zIndex: 100,
-  },
-  card: {
-    backgroundColor: "#C0392B",
-    borderRadius: 20,
-    padding: "28px 32px 24px",
-    width: 280,
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 16,
-    boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
-  },
-  iconCircle: {
-    width: 80,
-    height: 80,
-    borderRadius: "50%",
-    backgroundColor: "#EAF5EC",
-    border: "4px solid #C0392B",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  questionMark: {
-    fontSize: 36,
-    fontWeight: "700",
-    color: "#C0392B",
-  },
-  title: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "700",
-    textAlign: "center",
-  },
-  yakinBtn: {
-    backgroundColor: "#fff",
-    color: "#333",
-    border: "none",
-    borderRadius: 28,
-    padding: "12px 0",
-    width: "100%",
-    fontSize: 15,
-    fontWeight: "600",
-    cursor: "pointer",
-  },
-};
 
 export default function ProfilAdmin({ onBeranda, onLaporan, onTentangSistem, onLogout }) {
   const [activeNav, setActiveNav] = useState("profil");
   const [showLogout, setShowLogout] = useState(false);
+  const [nama, setNama] = useState("");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
-  const [form, setForm] = useState({
-    nama: "admin123",
-    email: "admin123@gmail.com",
-    alamat: "Jl. Admin",
-    noHp: "+ 62-812-3456-7890",
-  });
+  useEffect(() => {
+    const userData = localStorage.getItem("user");
+    if (userData) {
+      const u = JSON.parse(userData);
+      setNama(u.name || "");
+      setEmail(u.email || "");
+    }
+  }, []);
+
+  const handleEditProfil = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const res = await api.put("/auth/profile", { name: nama, email });
+      localStorage.setItem("user", JSON.stringify(res.data.user));
+      setSuccess("Profil berhasil diperbarui!");
+      setTimeout(() => setSuccess(""), 2000);
+    } catch (err) {
+      setError(err.response?.data?.message || "Gagal memperbarui profil");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setShowLogout(false);
     onLogout && onLogout();
   };
 
+  const inputStyle = {
+    width: "100%", padding: "16px 18px", borderRadius: 18, border: "none",
+    background: "#E9E9E9", fontSize: 15, color: "#566273",
+    outline: "none", boxSizing: "border-box",
+  };
+
+  const btnStyle = (bg) => ({
+    width: "100%", border: "none", borderRadius: 999, padding: 16,
+    fontSize: 16, fontWeight: "600", color: "#fff", background: bg, cursor: "pointer",
+  });
+
   return (
-    <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.headerTitle}>Profil</div>
-        <div style={styles.trashIcon}>🗑️</div>
+    <div style={{
+      width: "100%", maxWidth: "430px", minHeight: "100vh",
+      background: "#a8c28f", fontFamily: "Poppins, sans-serif",
+      position: "relative", margin: "0 auto",
+    }}>
+      {/* HEADER */}
+      <div style={{ textAlign: "center", paddingTop: 72, fontSize: 24, fontWeight: "700", color: "#fff" }}>
+        Profil
       </div>
 
-      {/* Avatar */}
-      <div style={styles.avatarWrapper}>
-        <div style={styles.avatar}>
-          <span style={styles.avatarIcon}>👤</span>
-        </div>
-      </div>
+      {/* BODY */}
+      <div style={{
+        marginTop: 64, background: "#557f59",
+        borderTopLeftRadius: 54, borderTopRightRadius: 54,
+        padding: "68px 22px 120px", minHeight: "85vh", position: "relative",
+      }}>
+        {/* Avatar */}
+        <div style={{
+          width: 102, height: 102, borderRadius: "50%", background: "#D8D8D8",
+          position: "absolute", top: -44, left: "50%", transform: "translateX(-50%)",
+          border: "2px solid white", display: "flex", alignItems: "center",
+          justifyContent: "center", fontSize: 52,
+        }}>👤</div>
 
-      {/* Form Card */}
-      <div style={styles.formCard}>
-        {/* Nama Lengkap */}
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>Nama Lengkap</label>
-          <input
-            style={styles.input}
-            value={form.nama}
-            onChange={(e) => setForm({ ...form, nama: e.target.value })}
-          />
-        </div>
+        {error && (
+          <div style={{ background: "#ff4d4d", color: "#fff", padding: 10, borderRadius: 8, marginBottom: 16, fontSize: 13, textAlign: "center" }}>
+            {error}
+          </div>
+        )}
+        {success && (
+          <div style={{ background: "#6aa06f", color: "#fff", padding: 10, borderRadius: 8, marginBottom: 16, fontSize: 13, textAlign: "center" }}>
+            {success}
+          </div>
+        )}
 
-        {/* Email */}
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>Email</label>
-          <input
-            style={styles.input}
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-          />
-        </div>
-
-        {/* Alamat */}
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>Alamat</label>
-          <input
-            style={styles.input}
-            value={form.alamat}
-            onChange={(e) => setForm({ ...form, alamat: e.target.value })}
-          />
+        <div style={{ marginBottom: 18 }}>
+          <div style={{ color: "white", marginBottom: 8 }}>Nama Lengkap</div>
+          <input value={nama} onChange={(e) => setNama(e.target.value)} style={inputStyle} />
         </div>
 
-        {/* No HP */}
-        <div style={styles.fieldGroup}>
-          <label style={styles.label}>No. HP</label>
-          <input
-            style={styles.input}
-            value={form.noHp}
-            onChange={(e) => setForm({ ...form, noHp: e.target.value })}
-          />
+        <div style={{ marginBottom: 18 }}>
+          <div style={{ color: "white", marginBottom: 8 }}>Email</div>
+          <input value={email} onChange={(e) => setEmail(e.target.value)} style={inputStyle} />
         </div>
 
-        {/* Buttons */}
-        <button style={styles.btnEditProfil}>Edit Profil</button>
-
-        <button style={styles.btnUbahKataSandi}>Ubah Kata Sandi</button>
+        <div style={{ marginBottom: 28 }}>
+          <div style={{ color: "white", marginBottom: 8 }}>Role</div>
+          <input value="Admin" readOnly style={inputStyle} />
+        </div>
 
         <button
-          style={styles.btnTentangSistem}
+          onClick={handleEditProfil}
+          disabled={loading}
+          style={btnStyle(loading ? "#999" : "#b4825d")}
+        >
+          {loading ? "Menyimpan..." : "Edit Profil"}
+        </button>
+        <div style={{ height: 14 }} />
+
+        <button style={btnStyle("#4E97B5")}>
+          Ubah Kata Sandi
+        </button>
+        <div style={{ height: 14 }} />
+
+        <button
+          style={btnStyle("#6B4A2A")}
           onClick={() => onTentangSistem && onTentangSistem()}
         >
-          <div style={styles.btnTentangTitle}>Tentang Sistem</div>
-          <div style={styles.btnTentangSub}>SmartWaste V.1.0.0</div>
+          Tentang Sistem
         </button>
+        <div style={{ height: 14 }} />
 
-        <button style={styles.btnKeluar} onClick={() => setShowLogout(true)}>
+        <button style={btnStyle("#D76464")} onClick={() => setShowLogout(true)}>
           Keluar Dari Akun
         </button>
       </div>
 
-      {/* Bottom Nav */}
-      <div style={styles.bottomNav}>
-        <div
-          style={{ ...styles.navItem, ...(activeNav === "beranda" ? styles.navActive : {}) }}
-          onClick={() => { setActiveNav("beranda"); onBeranda && onBeranda(); }}
-        >
-          <span style={styles.navIcon}>⊞</span>
-          <span style={styles.navLabel}>Beranda</span>
+      {/* FOOTER */}
+      <div style={{
+        position: "fixed", bottom: 14, left: "50%", transform: "translateX(-50%)",
+        width: "calc(100% - 40px)", maxWidth: "390px", height: 72,
+        background: "#d7d39c", borderRadius: 38,
+        display: "flex", justifyContent: "space-around", alignItems: "center",
+        padding: "0 10px", zIndex: 999,
+      }}>
+        <div onClick={() => { setActiveNav("beranda"); onBeranda && onBeranda(); }} style={menuItem(activeNav === "beranda" ? "#a8b97d" : "transparent")}>
+          <div style={{ fontSize: 22 }}>⊞</div>Beranda
         </div>
-        <div
-          style={{ ...styles.navItem, ...(activeNav === "laporan" ? styles.navActive : {}) }}
-          onClick={() => { setActiveNav("laporan"); onLaporan && onLaporan(); }}
-        >
-          <span style={styles.navIcon}>🕐</span>
-          <span style={styles.navLabel}>Laporan</span>
+        <div onClick={() => { setActiveNav("laporan"); onLaporan && onLaporan(); }} style={menuItem(activeNav === "laporan" ? "#a8b97d" : "transparent")}>
+          <div style={{ fontSize: 22 }}>🗑</div>Laporan
         </div>
-        <div
-          style={{ ...styles.navItem, ...(activeNav === "profil" ? styles.navActive : {}) }}
-          onClick={() => setActiveNav("profil")}
-        >
-          <span style={styles.navIcon}>👤</span>
-          <span style={styles.navLabel}>Profil</span>
+        <div onClick={() => setActiveNav("profil")} style={menuItem(activeNav === "profil" ? "#a8b97d" : "transparent")}>
+          <div style={{ fontSize: 22 }}>👤</div>Profil
         </div>
       </div>
 
-      {/* Pop Up Logout */}
-      {showLogout && (
-        <PopUpLogout
-          onYakin={handleLogout}
-          onBatal={() => setShowLogout(false)}
-        />
-      )}
+      {showLogout && <PopUpLogout onYakin={handleLogout} onBatal={() => setShowLogout(false)} />}
     </div>
   );
 }
 
-const styles = {
-  container: {
-    width: 390,
-    minHeight: 844,
-    backgroundColor: "#4A7C59",
-    fontFamily: "'Segoe UI', sans-serif",
-    display: "flex",
-    flexDirection: "column",
-    paddingBottom: 80,
-  },
-  header: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "56px 20px 8px",
-  },
-  headerTitle: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 22,
-    flex: 1,
-    textAlign: "center",
-  },
-  trashIcon: {
-    fontSize: 24,
-  },
-  avatarWrapper: {
-    display: "flex",
-    justifyContent: "center",
-    marginBottom: 16,
-  },
-  avatar: {
-    width: 80,
-    height: 80,
-    borderRadius: "50%",
-    backgroundColor: "#C8DFC9",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  avatarIcon: {
-    fontSize: 40,
-  },
-  formCard: {
-    backgroundColor: "#4A7C59",
-    padding: "0 20px",
-    display: "flex",
-    flexDirection: "column",
-    gap: 12,
-    flex: 1,
-  },
-  fieldGroup: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 4,
-  },
-  label: {
-    color: "#fff",
-    fontSize: 13,
-    fontWeight: "500",
-    marginLeft: 2,
-  },
-  input: {
-    backgroundColor: "#fff",
-    border: "none",
-    borderRadius: 10,
-    padding: "12px 14px",
-    fontSize: 14,
-    color: "#333",
-    outline: "none",
-  },
-  btnEditProfil: {
-    backgroundColor: "#A0784A",
-    color: "#fff",
-    border: "none",
-    borderRadius: 28,
-    padding: "14px",
-    fontSize: 15,
-    fontWeight: "600",
-    cursor: "pointer",
-    marginTop: 4,
-  },
-  btnUbahKataSandi: {
-    backgroundColor: "#3A6B7A",
-    color: "#fff",
-    border: "none",
-    borderRadius: 28,
-    padding: "14px",
-    fontSize: 15,
-    fontWeight: "700",
-    cursor: "pointer",
-  },
-  btnTentangSistem: {
-    backgroundColor: "#6B4A2A",
-    color: "#fff",
-    border: "none",
-    borderRadius: 28,
-    padding: "10px 14px",
-    cursor: "pointer",
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 2,
-  },
-  btnTentangTitle: {
-    fontSize: 15,
-    fontWeight: "700",
-    color: "#fff",
-  },
-  btnTentangSub: {
-    fontSize: 11,
-    color: "#D4C4A8",
-  },
-  btnKeluar: {
-    backgroundColor: "#C0392B",
-    color: "#fff",
-    border: "none",
-    borderRadius: 28,
-    padding: "14px",
-    fontSize: 15,
-    fontWeight: "600",
-    cursor: "pointer",
-  },
-  bottomNav: {
-    position: "fixed",
-    bottom: 0,
-    width: "100%",
-    left: 0,
-    right: 0,
-    backgroundColor: "#EDE8D0",
-    display: "flex",
-    justifyContent: "space-around",
-    alignItems: "center",
-    padding: "10px 0 16px",
-    borderTop: "1px solid rgba(0,0,0,0.08)",
-  },
-  navItem: {
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    gap: 4,
-    cursor: "pointer",
-    padding: "4px 20px",
-    borderRadius: 12,
-  },
-  navActive: {
-    backgroundColor: "rgba(74,124,89,0.15)",
-  },
-  navIcon: {
-    fontSize: 20,
-  },
-  navLabel: {
-    fontSize: 11,
-    color: "#4A7C59",
-    fontWeight: "600",
-  },
-};
+function menuItem(bg) {
+  return {
+    width: 68, textAlign: "center", fontSize: 12, fontWeight: "600",
+    color: "#6b4d34", cursor: "pointer", padding: "8px 4px", borderRadius: 18, background: bg,
+  };
+}
